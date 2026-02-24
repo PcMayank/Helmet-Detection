@@ -1,0 +1,6 @@
+nc: 2
+names: ['with_helmet', 'without_helmet']
+
+train: data/images/train
+val: data/images/val
+test: data/images/test

@@ -1,0 +1,43 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+
+# YOLO / Output folders
+runs/
+src/runs/
+
+# API uploads & results
+app/uploads/
+app/results/
+
+# Dataset cache
+data/*.cache
+
+# Git
+.git/
+
+# Docker
+*.tar
