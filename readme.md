@@ -1,284 +1,143 @@
-\# YOLOv8 Helmet Detection
+# 🪖 YOLOv8 Helmet Detection System
 
-
-
-Real-time helmet detection using YOLOv8 for industrial safety applications. This project provides an end-to-end pipeline from dataset collection and annotation to training, inference, REST API deployment, and Docker containerization.
-
-
+A real-time Helmet Detection system built using YOLOv8 and FastAPI.  
+This project demonstrates an end-to-end Computer Vision pipeline including dataset preparation, model training, inference, REST API integration, and Docker deployment.
 
 ---
 
+## 🚀 Features
 
-
-\##  Project Overview
-
-
-
-\- \*\*Problem Statement:\*\* Ensure safety compliance by detecting helmets in industrial environments.
-
-\- \*\*Goal:\*\* Train a YOLOv8 model for accurate real-time helmet detection.
-
-\- \*\*Pipeline:\*\*
-
-&nbsp; 1. Dataset collection \& annotation
-
-&nbsp; 2. Model training via Jupyter Notebook and modular scripts
-
-&nbsp; 3. Inference on images/videos
-
-&nbsp; 4. REST API integration using FastAPI
-
-&nbsp; 5. Docker deployment for easy portability
-
-&nbsp; 6. Live testing and evaluation
-
-
+- Real-time helmet detection using YOLOv8
+- Custom dataset training (YOLO format)
+- Image and webcam inference
+- REST API using FastAPI
+- Docker container support
+- Modular training pipeline
 
 ---
 
+## 📁 Project Structure
 
-
-\##  Project Structure
-
-
-
+```
 helmet-detection/
-
-├── data/
-
-│ ├── images/
-
-│ │ ├── train/
-
-│ │ └── val/
-
-│ └── labels/
-
-├── train/
-
-├── val/
-
-├── notebooks/
-
-│ └── helmet\_detection\_yolov8.ipynb
-
-├── model/
-
-│ └── yolov8/
-
-├── src/
-
-│ ├── train.py
-
-│ ├── detect.py
-
-│ └── utils.py
-
-├── app/
-
-│ └── app.py
-
-├── README.md
-
+│
+├── app/                # FastAPI backend
+├── data/               # Dataset (images & labels)
+├── model/              # Trained model (best.pt)
+├── notebooks/          # Training notebook
+├── src/                # Training & detection scripts
 ├── requirements.txt
-
 ├── Dockerfile
-
-├── .gitignore
-
-└── .env
-
-
+└── README.md
+```
 
 ---
 
+## ⚙️ Installation
 
-
-\##  Installation
-
-
-
-1\. \*\*Clone the repository:\*\*
-
-
+### 1. Clone Repository
 
 ```bash
+git clone https://github.com/PcMayank/Helmet-Detection.git
+cd Helmet-Detection
+```
 
-git clone <repository\_url>
+### 2. Create Virtual Environment
 
-cd helmet-detection
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
+### 3. Install Dependencies
 
-
-2\. \*\*Install dependencies:\*\*
-
+```bash
 pip install -r requirements.txt
+```
 
-Ensure ultralytics YOLOv8 is installed for model training and inference.
+---
 
+## 🧠 Model Weights
 
+Place trained model inside:
 
-3\. \*\*Dataset Preparation:\*\*
+```
+model/best.pt
+```
 
+---
 
+## 🏋️ Model Training
 
--Collect helmet images from Roboflow, Kaggle, CCTV footage, or custom sources.
+```bash
+python src/train.py --data data/data.yaml --epochs 50 --img-size 640
+```
 
+Or use notebook:
 
+```
+notebooks/helmet_detection_yolov8.ipynb
+```
 
--Annotate images using LabelImg or Roboflow in YOLO .txt format.
+---
 
+## 🔎 Image Inference
 
-
--Organize the dataset:
-
-data/
-
-├── images/
-
-│   ├── train/
-
-│   └── val/
-
-└── labels/
-
-&nbsp;   ├── train/
-
-&nbsp;   └── val/
-
--Create and configure data.yaml specifying classes and dataset paths.
-
-
-
-4\. \*\*Model Training:\*\*
-
-
-
-a. Via Notebook:
-
-
-
--Open notebooks/helmet\_detection\_yolov8.ipynb
-
-
-
--Configure data.yaml paths
-
-
-
--Train the YOLOv8 model using the notebook cells
-
-
-
-b. Via Modular Script:
-
-&nbsp;python src/train.py --data data/data.yaml --epochs 50 --img-size 640 --batch-size 16
-
-
-
-5\. \*\*Inference:\*\*
-
+```python
 from ultralytics import YOLO
 
-
-
-model = YOLO("model/yolov8/best.pt")
-
-results = model.predict(source="data/images/val/sample1.jpg", conf=0.5, save=True, save\_txt=True)
-
+model = YOLO("model/best.pt")
+results = model.predict("image.jpg", conf=0.5)
 results.show()
+```
 
+---
 
+## 🌐 Run FastAPI Server
 
-\- Outputs saved in runs/detect/exp/ folder
-
-
-
-6\. \*\*REST API with FastAPI:\*\*
-
-
-
-\- Start the API:
-
+```bash
 uvicorn app.app:app --reload
+```
 
+API Endpoint:
 
+```
+POST /predict
+```
 
--Endpoint: /predict
+Test:
 
-Accepts image uploads and returns JSON containing:
-
-
-
-* labels
-* confidence
-* bounding boxes
-
-
-
--Test via Postman or curl:
-
+```bash
 curl -X POST -F "file=@sample.jpg" http://localhost:8000/predict
+```
 
+---
 
+## 🐳 Docker
 
-7\. \*\*Docker Deployment:\*\*
+Build:
 
+```bash
+docker build -t helmet-detector .
+```
 
+Run:
 
-a. Build the Docker image:
+```bash
+docker run -p 8000:8000 helmet-detector
+```
 
+---
 
+## 📌 Resume Highlights
 
-&nbsp; docker build -t helmet-detector .
+- Implemented YOLOv8 object detection model
+- Built REST API using FastAPI
+- Containerized application with Docker
+- Designed ML training pipeline
 
+---
 
+## 👨‍💻 Author
 
-
-
-b. Run the container:
-
-
-
-&nbsp; docker run -p 8000:8000 helmet-detector
-
-
-
-
-
-c. Access API at http://localhost:8000/predict
-
-
-
-Live Testing \& Improvements
-
-
-
-Webcam feed detection
-
-
-
-Batch inference on multiple images
-
-
-
-Analyze accuracy, false positives, and edge cases
-
-
-
-
-
-8\. \*\*Future enhancements:\*\*
-
-
-
-* Helmet-type classification
-* Sound alerts or visual dashboard
-* Multi-camera integration
-
-
-
-
-
-
-
+Mayank
