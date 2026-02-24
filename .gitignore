@@ -41,3 +41,5 @@ data/*.cache
 
 # Docker
 *.tar
+model/*.pt
+model/
