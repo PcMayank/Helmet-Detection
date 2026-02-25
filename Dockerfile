@@ -1,28 +1,28 @@
-# Fast ML-friendly base image
+# Use smaller Python image
 FROM python:3.10-slim
 
 WORKDIR /app
 
 # Install only required system libs
 RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
     libgl1 \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first
+# Copy requirements
 COPY requirements.txt .
 
-# Install dependencies
-RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+# Install deps (no cache)
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app files
-COPY app ./app
-COPY src ./src
+# Copy project
+COPY . .
 
-# Create runtime folders
-RUN mkdir -p app/uploads app/results
+# Make folders
+RUN mkdir -p uploads results
 
+# Expose port
 EXPOSE 8000
 
+# Run app
 CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
