@@ -1,32 +1,33 @@
-# Python cache
+# Python
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
 
-# Virtual environments
+# Virtual env
 venv/
 env/
 
-# Jupyter notebooks checkpoints
-.ipynb_checkpoints/
+# Data (VERY IMPORTANT)
+data/
+runs/
+video_feed/
+notebooks/
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
+# Models (too big for docker build)
+model/*.pt
 
 # Git
 .git/
 .gitignore
 
-# IDE configs
+# OS / IDE
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
 
-# App runtime folders
-uploads/
-results/
-
-# Environment files
+# Env
 .env
+
+# Logs
+*.log

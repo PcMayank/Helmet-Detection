@@ -1,41 +1,28 @@
-# =========================
-# Dockerfile for Helmet Detection API
-# =========================
-
-# Use official Python 3.10 slim image
+# Fast ML-friendly base image
 FROM python:3.10-slim
 
-# Set working directory inside container
 WORKDIR /app
 
-# Install system dependencies required for OpenCV and other libraries
+# Install only required system libs
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
     libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender1 \
     libgl1 \
-    wget \
-    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for caching
+# Copy requirements first
 COPY requirements.txt .
 
-# Upgrade pip and install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the app code
-COPY . .
+# Copy app files
+COPY app ./app
+COPY src ./src
 
-# Create folders for uploads and results
-RUN mkdir -p uploads results
+# Create runtime folders
+RUN mkdir -p app/uploads app/results
 
-# Expose port for FastAPI
 EXPOSE 8000
 
-# Run FastAPI app with uvicorn
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
